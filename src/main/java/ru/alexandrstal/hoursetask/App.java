@@ -16,7 +16,11 @@ public class App {
         // положение белых
         private List<Short> whiteFigs;
         // положение черных
+
         private List<Short> blackFigs;
+
+        // история позиций - как мы в нее попали
+        private LinkedList<Position> prevPositionsHistory = new LinkedList<>();
 
         public boolean isWhiteTurn() {
             return whiteTurn;
@@ -41,6 +45,11 @@ public class App {
         public void setBlackFigs(List<Short> blackFigs) {
             this.blackFigs = blackFigs;
         }
+
+        public LinkedList<Position> getPrevPositionsHistory() {
+            return prevPositionsHistory;
+        }
+
 
         @Override
         public String toString() {
@@ -108,6 +117,8 @@ public class App {
                         position.setWhiteFigs(current.getWhiteFigs());
                         position.setBlackFigs(newFigPositions);
                     }
+                    position.getPrevPositionsHistory().addAll(current.getPrevPositionsHistory());
+                    position.getPrevPositionsHistory().add(current);
                     positions.add(position); // сохраняем позицию
                 }
             }
@@ -127,6 +138,12 @@ public class App {
             for (Position p:av){
                 if (p.equals(finPosition)){  // если позиция = искомой - пишем об этом и выходим!
                     System.out.println("ПЕРЕСТАНОВКА ЗАКОНЧЕНА!");
+                    List<Position> positionHistory = new LinkedList<>();
+                    positionHistory.addAll(p.getPrevPositionsHistory());
+                    positionHistory.add(p);
+                    System.out.println("История перестановок:");
+                    System.out.println(positionHistory);
+
                     return null;
                 }
 
@@ -172,8 +189,8 @@ public class App {
 
         finPosition = new Position();
         finPosition.setWhiteTurn(true);
-        finPosition.setWhiteFigs(Arrays.asList(new Short[]{7, 9}));
-        finPosition.setBlackFigs(Arrays.asList(new Short[]{3, 1}));
+        finPosition.setWhiteFigs(Arrays.asList(new Short[]{3, 7}));
+        finPosition.setBlackFigs(Arrays.asList(new Short[]{1, 9}));
 
     }
 
@@ -185,8 +202,12 @@ public class App {
          */
         Position startPosition = new Position();
         startPosition.setWhiteTurn(true);
-        startPosition.setWhiteFigs(Arrays.asList(new Short[]{1, 3}));
-        startPosition.setBlackFigs(Arrays.asList(new Short[]{7, 9}));
+   //     startPosition.setWhiteFigs(Arrays.asList(new Short[]{1, 3}));
+   //     startPosition.setBlackFigs(Arrays.asList(new Short[]{7, 9}));
+
+        startPosition.setWhiteFigs(Arrays.asList(new Short[]{1, 9}));
+        startPosition.setBlackFigs(Arrays.asList(new Short[]{3, 7}));
+
 
         Set<Position> positions = getAviablePositions(startPosition);
 
